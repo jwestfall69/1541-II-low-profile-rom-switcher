@@ -9,8 +9,9 @@
    * [Software](#software)
 * [Programming The 27c512](#programming-the-27c512)
 * [Installation](#installation)
+   * [Reset Line (C64)](#reset-line-c64)
    * [Testing Cut Pins](#testing-cut-pins)
-   * [Reset Line](#reset-line)
+   * [Reset Line (1541-II)](#reset-line-1541-ii)
 * [Debugging](#debugging)
 
 ## Overview
@@ -122,12 +123,27 @@ linux $ cat bank0_kernel.bin bank1_kernel.bin bank2_kernel.bin bank3_kernel.bin 
 Then program your low_profile_27c512.bin to your 27c512 eprom.
 
 ## Installation
+#### Reset Line (C64)
+Some C64 models have a segmented RESET signals for internal (INTRES) and external (EXTRES).  The latter goes to the disk drive and only seems to trigger during a power up of the C64.  This prevents the SKS64 in the C64 from sending its rom switch command to the disk drive.
+
+To work around this is possible to connect the INTRES and EXTRES lines together, so when the SKS64 in the C64 sends its rom switch command to the INTRES line it will also goto the EXTRES.
+
+
+| C64 MODEL       | HAS SEGMENTED RESET   | WORK AROUND |
+|:---------------:|:---------------------:|-------------|
+| 326298 (long)   |         NO            | Not Needed  |
+| 250407 (long)   |         NO            | Not Needed  |
+| 250425 (long)   |        YES            | ?? / don't own this model |
+| 250466 (long)   |        YES            | ?? / don't own this model |
+| 250469 (short)  |        YES            | Bridge PIN 2 and 6 on U22 (7406N) |
+
+
 #### Testing Cut Pins
 Once you have the low profile board installed in the kernel rom socket you will want to verify the cut pins are not making contact with the underlying socket on the 1541-II board.
 
 Use a multimeter on continuity mode and verify there is no continuity between PIN 28 (VCC) and the cut pins (PIN 1 and PIN 27).
 
-#### Reset Line
+#### Reset Line (1541-II)
 SKS64 in the C64 communicates to the low profile board over the RESET line to tell it which 1541-II kernel rom to switch it.
 
 There are a few places you can tap the RESET line, but the one below seems to be easiest.
